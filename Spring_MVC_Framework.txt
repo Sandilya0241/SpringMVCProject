@@ -157,3 +157,40 @@ public String showForm(Model theModel) {
  <form:options items="${theCountryOptions}" />
 </form:select>
 7. Remove all references to country option from your Student.java.  
+
+
+
+
+Special Note about BindingResult Parameter Order
+================================================================
+When performing Spring MVC validation, the location of the BindingResult parameter is very important. In the method signature, the BindingResult parameter must appear immediately after the model attribute. 
+
+If you place it in any other location, Spring MVC validation will not work as desired. In fact, your validation rules will be ignored.
+
+        @RequestMapping("/processForm")
+        public String processForm(
+                @Valid @ModelAttribute("customer") Customer theCustomer,
+                BindingResult theBindingResult) {
+            ...            
+        }
+Here is the relevant section from the Spring Reference Manual
+
+---
+
+Defining @RequestMapping methods
+
+@RequestMapping handler methods have a flexible signature and can choose from a range of supported controller method arguments and return values.
+...
+
+The Errors or BindingResult parameters have to follow the model object that is being
+bound immediately ...
+
+
+
+@InitBinder
+===================================================
+
+@InitBinder annotation works as a pre-processor. It will pre-process each web request to our controller. Method annotated with @InitBinder is executed.
+
+
+
